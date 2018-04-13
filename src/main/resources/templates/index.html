@@ -15,7 +15,7 @@
 
     #result {
         margin: 0 auto;
-        width: 420px;
+        width: 500px;
         text-align: left;
     }
 </style>
@@ -26,6 +26,7 @@
     <tr>
         <th style="width: 200px">单组人数</th>
         <th style="width: 200px">是否打散多余人数</th>
+        <th style="width: 200px">是否每组需要女生</th>
         <th style="width: 200px"></th>
     </tr>
     <tr>
@@ -34,6 +35,12 @@
             <select id="excess" name="excess">
                 <option value="false">打散</option>
                 <option value="true">不打散</option>
+            </select>
+        </td>
+        <td>
+            <select id="girl" name="girl">
+                <option value="true">需要</option>
+                <option value="false">不需要</option>
             </select>
         </td>
         <td>
@@ -51,20 +58,22 @@
     $('#divide').on('click', function () {
         var size = $('#size').val()
         var excess = $('#excess').val()
-        divide(size, excess)
+        var girl = $('#girl').val()
+        divide(size, excess, girl)
     })
 
     $('#pageList').on('click', function () {
         window.location.href = '/page/list'
     })
 
-    function divide(size, excess) {
+    function divide(size, excess, girl) {
         $.ajax({
             url: '/march/divide',
             type: 'POST',
             data: {
                 size: size,
-                excess: excess
+                excess: excess,
+                girl: girl
             },
             cache: false,
             success: function (data) {

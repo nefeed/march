@@ -14,6 +14,10 @@ public class Group {
      * 每组名单
      */
     private List<Person> group = new ArrayList<>();
+    /**
+     * 集合战斗力
+     */
+    private int power;
 
     public List<Person> getGroup() {
         return group;
@@ -21,5 +25,13 @@ public class Group {
 
     public void setGroup(List<Person> group) {
         this.group = group;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
     }
 }

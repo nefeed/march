@@ -45,11 +45,16 @@ public class MarchController {
      *
      * @param size   按多少人一组进行划分
      * @param excess 是否需要开出少人的一组
+     * @param girl 是否每组需要一名女生
      *
      * @return 分组结果
      */
     @RequestMapping("/divide")
-    public String divide(int size, @RequestParam(defaultValue = "false") Boolean excess) {
+    public String divide(int size, @RequestParam(defaultValue = "false") Boolean excess
+    ,@RequestParam(defaultValue = "true") Boolean girl) {
+        if (size < 4) {
+            return "暂不支持4人以下分组";
+        }
         List<Person> people = localFileService.readPersonList();
         // 组数
         int groupNum = people.size() / size;
@@ -108,12 +113,13 @@ public class MarchController {
                         withGirl = true;
                     }
                 }
-                if (!withGirl) {
+                if (girl && !withGirl) {
                     // 该分组没有女生，从新分组
                     isPowerExcessive = true;
                     LOG.warn("该分组没有女生：{}", JSON.toJSONString(group.get(i)));
                     break;
                 } else {
+                    group.get(i).setPower(frontGroupPower);
                     for (int j = (i + 1); j < group.size(); j++) {
                         if (j == group.size()) {
                             break;
@@ -123,7 +129,7 @@ public class MarchController {
                             behindGroupPower += it.getPower();
                         }
                         double weight = frontGroupPower / (frontGroupPower + behindGroupPower);
-                        if (weight > 0.75) {
+                        if (weight > 0.68) {
                             // 改组能力值过强
                             isPowerExcessive = true;
                             LOG.warn("该分组能力过强：{}", JSON.toJSONString(group.get(i)));
@@ -158,7 +164,7 @@ public class MarchController {
                     result.append(it.getName()).append("、");
                 }
             }
-            result.append("<br />");
+            result.append("【集合战斗力：").append(group.get(i).getPower()).append("】<br />");
         }
         return "按照 " + size + " 人一组分组结果<br />" + result.toString();
     }
