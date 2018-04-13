@@ -66,6 +66,15 @@
     })
 
     function addPerson(name, sex, power) {
+        if (name == '') {
+            alert('请输入名称')
+        }
+        if (sex == '') {
+            alert('请选择性别')
+        }
+        if (power == '') {
+            alert('请输入战斗力')
+        }
         $.ajax({
             url: '/march/add',
             type: 'POST',

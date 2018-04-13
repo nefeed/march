@@ -43,9 +43,7 @@ public class LocalFileService {
     public void write(String content) throws IOException {
         File file = resource.getFile();
         byte bytes[] = content.getBytes();
-        int length = bytes.length;
         FileOutputStream fos = new FileOutputStream(file);
-        fos.write(bytes, 0, length);
         fos.write(bytes);
         fos.close();
     }

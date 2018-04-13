@@ -1,5 +1,6 @@
 package io.nefeed.march.entity;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -12,14 +13,17 @@ public class Person implements Serializable {
     /**
      * 姓名
      */
+    @NotNull(message = "名称不能为空")
     private String name;
     /**
      * 性别
      */
+    @NotNull(message = "请选择性别")
     private Integer sex;
     /**
      * 能力值
      */
+    @NotNull(message = "请输入战斗力")
     private Integer power;
     /**
      * 前端回显的用户名

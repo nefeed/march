@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,13 +32,48 @@ public class MarchController {
     private LocalFileService localFileService;
 
     @RequestMapping(value = "/add", method=RequestMethod.POST)
-    public String save(@ModelAttribute(value="person") Person person) {
-        return "Waiting";
+    public String save(Person person) {
+        List<Person> people = localFileService.readPersonList();
+        for (Person it : people) {
+            if (it.getName().equals(person.getName())) {
+                return it.getName() + "已经存在，请不要重复添加！";
+            }
+        }
+        people.add(person);
+        try {
+            localFileService.write(JSON.toJSONString(people));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "写入文件失败";
+        }
+        return person.getName() + "添加成功！";
     }
 
     @RequestMapping(value = "/delete")
     public String delete(String name) {
-        return "Waiting";
+        if (name == null || name.isEmpty()) {
+            return "请输入要删除的名称";
+        }
+        List<Person> people = localFileService.readPersonList();
+        boolean contain = false;
+        for (int i = 0; i < people.size(); i++) {
+            Person it = people.get(i);
+            if (it.getName().equals(name)) {
+                people.remove(i);
+                contain = true;
+                break;
+            }
+        }
+        if (!contain) {
+            return name + "不存在，无法删除！";
+        }
+        try {
+            localFileService.write(JSON.toJSONString(people));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "写入文件失败";
+        }
+        return name + "删除成功！";
     }
 
     /**
