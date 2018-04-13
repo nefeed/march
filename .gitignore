@@ -24,3 +24,4 @@ src/main/resources/default.json
 /dist/
 /nbdist/
 /.nb-gradle/
+march.log

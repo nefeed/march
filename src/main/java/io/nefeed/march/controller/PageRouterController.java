@@ -29,7 +29,7 @@ public class PageRouterController {
 
     @RequestMapping("/index")
     public String home() {
-        return "/index";
+        return "index";
     }
 
     @RequestMapping("/list")
@@ -39,7 +39,7 @@ public class PageRouterController {
             it.setSexShow(SexEnum.getByCode(it.getSex()).getName());
         }
         model.addAttribute("list", list);
-        return "/list";
+        return "list";
     }
 
 }
