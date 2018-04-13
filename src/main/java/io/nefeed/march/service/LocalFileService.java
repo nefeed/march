@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 
 /**
  * 本地文件工具
+ *
  * @author 章华隽
  * @mail nefeed@163.com
  * @time 2018-04-12 17:06
@@ -21,7 +22,7 @@ public class LocalFileService {
 
     private static Logger LOG = LoggerFactory.getLogger(LocalFileService.class);
 
-    @Value(value="classpath:default.json")
+    @Value(value = "classpath:default.json")
     private Resource resource;
 
     public String readLocalContent() throws IOException {
