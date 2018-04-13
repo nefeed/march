@@ -7,12 +7,9 @@ import io.nefeed.march.enums.SexEnum;
 import io.nefeed.march.service.LocalFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,6 +30,16 @@ public class MarchController {
     @Resource
     private LocalFileService localFileService;
 
+    @RequestMapping(value = "/add", method=RequestMethod.POST)
+    public String save(@ModelAttribute(value="person") Person person) {
+        return "Waiting";
+    }
+
+    @RequestMapping(value = "/delete")
+    public String delete(String name) {
+        return "Waiting";
+    }
+
     /**
      * 分组
      *
@@ -43,26 +50,7 @@ public class MarchController {
      */
     @RequestMapping("/divide")
     public String divide(int size, @RequestParam(defaultValue = "false") Boolean excess) {
-        String content;
-        try {
-            content = localFileService.readLocalContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "本地文件读取出错！";
-        }
-        if (content == null || content.isEmpty()) {
-            return "本地人员名单还未配置";
-        }
-        List<Person> people;
-        try {
-            people = JSON.parseArray(content, Person.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "用户名单解析为队列失败";
-        }
-        if (people == null || people.size() == 0) {
-            return "本地用户名单长度为空";
-        }
+        List<Person> people = localFileService.readPersonList();
         // 组数
         int groupNum = people.size() / size;
         // 超出size的人数

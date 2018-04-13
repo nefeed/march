@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>自动分组工具</title>
 </head>
+<style>
+    body {
+        margin: 0 auto;
+        text-align: center
+    }
+
+    #result {
+        margin: 0 auto;
+        width: 420px;
+        text-align: left;
+    }
+</style>
 <body>
-<h1>Hello World!</h1>
+<h2>人员名单</h2>
+<!--/*@thymesVar id="list" type="List<Person>"*/-->
+<table border="0.5" style="margin: 0 auto;">
+    <tr>
+        <th style="width: 200px">单组人数</th>
+        <th style="width: 200px">是否打散多余人数</th>
+        <th style="width: 200px"></th>
+    </tr>
+    <tr>
+        <td><input id="size" name="size" value="5" type="number" style="width: 50px;"/></td>
+        <td>
+            <select id="excess" name="excess">
+                <option value="false">打散</option>
+                <option value="true">不打散</option>
+            </select>
+        </td>
+        <td>
+            <button id="divide">分组</button>
+            <button id="pageList">人员列表</button>
+        </td>
+    </tr>
+</table>
+<br/>
+<br/>
+<div id="result"></div>
 </body>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript">
+    $('#divide').on('click', function () {
+        var size = $('#size').val()
+        var excess = $('#excess').val()
+        divide(size, excess)
+    })
+
+    $('#pageList').on('click', function () {
+        window.location.href = '/page/list'
+    })
+
+    function divide(size, excess) {
+        $.ajax({
+            url: '/march/divide',
+            type: 'POST',
+            data: {
+                size: size,
+                excess: excess
+            },
+            cache: false,
+            success: function (data) {
+                $('#result').html(data)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('请求返回错误\nStatus：' + textStatus + '\nerrorThrown：' + errorThrown)
+            }
+        })
+    }
+</script>
 </html>

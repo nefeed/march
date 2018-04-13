@@ -21,6 +21,10 @@ public class Person implements Serializable {
      * 能力值
      */
     private Integer power;
+    /**
+     * 前端回显的用户名
+     */
+    private String sexShow;
 
     public String getName() {
         return name;
@@ -44,5 +48,13 @@ public class Person implements Serializable {
 
     public void setPower(Integer power) {
         this.power = power;
+    }
+
+    public String getSexShow() {
+        return sexShow;
+    }
+
+    public void setSexShow(String sexShow) {
+        this.sexShow = sexShow;
     }
 }

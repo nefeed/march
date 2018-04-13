@@ -7,8 +7,9 @@ package io.nefeed.march.enums;
  * @time 2018-04-13 09:04
  */
 public enum SexEnum {
-    WOMAN(0, "女性", "woman"),
-    MAN(1, "男性", "man"),
+    WOMAN(0, "女", "woman"),
+    MAN(1, "男", "man"),
+    UNKNOWN(404, "未知", "unknown"),
     ;
 
     SexEnum(int code, String name, String alias) {
@@ -43,5 +44,21 @@ public enum SexEnum {
 
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    /**
+     * 通过枚举 code 获得枚举
+     *
+     * @param code 枚举Code
+     *
+     * @return SexEnum
+     */
+    public static SexEnum getByCode(Integer code) {
+        for (SexEnum cacheCode : values()) {
+            if (cacheCode.getCode() == code) {
+                return cacheCode;
+            }
+        }
+        return UNKNOWN;
     }
 }

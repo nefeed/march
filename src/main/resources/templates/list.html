@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>人员名单</title>
+</head>
+<style>
+    body {
+        margin: 0 auto;
+        text-align: center
+    }
+</style>
+<body>
+<h2>人员名单</h2>
+<!--/*@thymesVar id="list" type="List<Person>"*/-->
+<table border="0.5" style="margin: 0 auto;">
+    <tr>
+        <th style="width: 80px">姓名</th>
+        <th style="width: 50px">性别</th>
+        <th style="width: 60px"战斗力</th>
+        <th style="width: 100px">操作</th>
+    </tr>
+    <tr>
+        <td><input type="text" id="name" name="name"/></td>
+        <td><select id="sex" name="sex">
+            <option value="1">男</option>
+            <option value="0">女</option>
+        </select></td>
+        <td><input type="text" id="power" name="power"/></td>
+        <td>
+            <button id="add">添加</button>
+            <button id="pageDivide">分组</button>
+        </td>
+    </tr>
+</table>
+<br />
+<div id="result"></div>
+<br />
+<table style="margin: 0 auto;">
+    <tr>
+        <th>姓名：</th>
+        <th>性别：</th>
+        <th>操作：</th>
+    </tr>
+    <tr th:each="person:${list}">
+        <td th:text="${person.name}">姓名</td>
+        <td th:text="${person.sexShow}">性别</td>
+        <td><a href="#" style="color: red;" th:onclick="'deletePerson(\''+${person.name}+'\')'">删除</a></td>
+    </tr>
+</table>
+</body>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript">
+    $('#add').on('click', function () {
+        var name = $('#name').val()
+        var sex = $('#sex').val()
+        var power = $('#power').val()
+        addPerson(name, sex, power)
+    })
+
+    $('#pageDivide').on('click', function () {
+        window.location.href = '/page/index'
+    })
+
+    function addPerson(name, sex, power) {
+        $.ajax({
+            url: '/march/add',
+            type: 'POST',
+            data: {
+                name: name,
+                sex: sex,
+                power: power
+            },
+            cache: false,
+            success: function (data) {
+                console.log(name + '添加结果：' + data)
+                $('#result').html(data)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('请求返回错误\nStatus：' + textStatus + '\nerrorThrown：' + errorThrown)
+            }
+        })
+    }
+
+    function deletePerson(name) {
+        $.ajax({
+            url: '/march/delete',
+            type: 'POST',
+            data: {
+                name: name
+            },
+            cache: false,
+            success: function (data) {
+                console.log(name + '删除结果：' + data)
+                $('#result').html(data)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('请求返回错误\nStatus：' + textStatus + '\nerrorThrown：' + errorThrown)
+            }
+        })
+    }
+</script>
+</html>
